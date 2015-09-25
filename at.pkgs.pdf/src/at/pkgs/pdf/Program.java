@@ -90,7 +90,7 @@ public class Program {
 			Program.build(parameters);
 			break;
 		case "concatenate" :
-			Program.build(parameters);
+			Program.concatenate(parameters);
 			break;
 		default :
 			Program.usage(System.err);
