@@ -402,7 +402,7 @@ public class DocumentModel implements Serializable {
 						300F,
 						80F,
 						0F,
-						null,
+						Horizontal.CENTER,
 						"monospaced.regular",
 						10F,
 						"F00",
