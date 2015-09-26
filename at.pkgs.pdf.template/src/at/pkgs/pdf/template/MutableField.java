@@ -15,10 +15,11 @@
  * limitations under the License.
  */
 
-package at.pkgs.pdf.builder;
+package at.pkgs.pdf.template;
 
 import java.util.Map;
 import java.util.HashMap;
+import at.pkgs.pdf.builder.DocumentModel;
 
 public class MutableField extends Field {
 

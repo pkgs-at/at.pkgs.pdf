@@ -15,7 +15,9 @@
  * limitations under the License.
  */
 
-package at.pkgs.pdf.builder;
+package at.pkgs.pdf.template;
+
+import at.pkgs.pdf.builder.DocumentModel;
 
 public abstract class FieldProvider implements Iterable<String>, NamedValueProvider<Field> {
 

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package at.pkgs.pdf.builder;
+package at.pkgs.pdf.template;
 
 public interface NamedValueProvider<ValueType> {
 

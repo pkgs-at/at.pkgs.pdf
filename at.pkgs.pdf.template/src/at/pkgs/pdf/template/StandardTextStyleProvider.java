@@ -15,9 +15,8 @@
  * limitations under the License.
  */
 
-package at.pkgs.pdf.builder;
+package at.pkgs.pdf.template;
 
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 import java.util.HashSet;
@@ -26,35 +25,29 @@ import java.util.HashMap;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class StandardFieldProvider extends FieldProvider {
+public class StandardTextStyleProvider implements NamedValueProvider<TextStyle> {
 
-	private final Map<String, Field> map;
+	private final Map<String, TextStyle> map;
 
-	public StandardFieldProvider(Map<String, Field> map) {
+	public StandardTextStyleProvider(Map<String, TextStyle> map) {
 		this.map = Collections.unmodifiableMap(map);
 	}
 
 	@Override
-	public Iterator<String> iterator() {
-		return this.map.keySet().iterator();
-	}
-
-	@Override
-	public Field get(String name) {
+	public TextStyle get(String name) {
 		return this.map.get(name);
 	}
 
-	public static StandardFieldProvider parse(
-			FieldProviderFactory factory,
+	public static StandardTextStyleProvider parse(
 			Properties properties,
 			String prefix,
 			String... excludes) {
 		Set<String> ignored;
-		Map<String, Field> map;
+		Map<String, TextStyle> map;
 
 		prefix = (prefix == null) ? "" : prefix + '.';
 		ignored = new HashSet<String>(Arrays.asList(excludes));
-		map = new HashMap<String, Field>();
+		map = new HashMap<String, TextStyle>();
 		for (Object key : properties.keySet()) {
 			String name;
 			String value;
@@ -65,9 +58,9 @@ public class StandardFieldProvider extends FieldProvider {
 			if (ignored.contains(name)) continue;
 			value = properties.getProperty(name);
 			if (value == null) continue;
-			map.put(name.substring(prefix.length()), Field.parse(factory, value));
+			map.put(name.substring(prefix.length()), TextStyle.parse(value));
 		}
-		return new StandardFieldProvider(map);
+		return new StandardTextStyleProvider(map);
 	}
 
 }

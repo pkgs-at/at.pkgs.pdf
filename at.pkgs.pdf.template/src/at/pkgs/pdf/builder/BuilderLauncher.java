@@ -1,4 +1,4 @@
-package at.pkgs.pdf.launcher;
+package at.pkgs.pdf.builder;
 
 import java.util.Collection;
 import java.util.List;
@@ -7,9 +7,8 @@ import java.util.Arrays;
 import java.io.File;
 import java.io.IOException;
 import javax.xml.bind.JAXB;
-import at.pkgs.pdf.builder.DocumentModel;
 
-public class Launcher {
+public class BuilderLauncher {
 
 	private static final String[] STRINGS = new String[0];
 
@@ -17,7 +16,7 @@ public class Launcher {
 
 	private final File binary;
 
-	public Launcher(
+	public BuilderLauncher(
 			File binary) {
 		this.java = new File(System.getProperty("java.home"), "bin/java");
 		this.binary = binary;
@@ -36,7 +35,7 @@ public class Launcher {
 		parameters.add("-jar");
 		parameters.add(this.binary.getAbsolutePath());
 		for (String argument : arguments) parameters.add(argument);
-		builder = new ProcessBuilder(parameters.toArray(Launcher.STRINGS));
+		builder = new ProcessBuilder(parameters.toArray(BuilderLauncher.STRINGS));
 		builder.inheritIO();
 		process = builder.start();
 		result = null;
@@ -54,7 +53,7 @@ public class Launcher {
 	protected int launch(
 			List<String> arguments)
 					throws IOException {
-		return this.launch(arguments.toArray(Launcher.STRINGS));
+		return this.launch(arguments.toArray(BuilderLauncher.STRINGS));
 	}
 
 	public void build(

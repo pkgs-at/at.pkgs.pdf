@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package at.pkgs.pdf.builder;
+package at.pkgs.pdf.template;
 
-public interface ValueFormatter {
+public interface FieldVisitor {
 
-	public String format(Object value);
+	public Field apply(String name, Field field, Object value);
 
 }

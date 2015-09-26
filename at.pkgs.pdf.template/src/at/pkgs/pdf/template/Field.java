@@ -15,9 +15,10 @@
  * limitations under the License.
  */
 
-package at.pkgs.pdf.builder;
+package at.pkgs.pdf.template;
 
 import java.util.regex.Pattern;
+import at.pkgs.pdf.builder.DocumentModel;
 
 public class Field {
 
