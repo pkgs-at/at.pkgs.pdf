@@ -65,7 +65,7 @@ public class BuildLauncher {
 		File temporal;
 		int result;
 
-		temporal = File.createTempFile(this.getClass().getName(), ".xml");
+		temporal = File.createTempFile(this.getClass().getName() + '.', ".xml");
 		try {
 			JAXB.marshal(model, temporal);
 			result = this.launch(
