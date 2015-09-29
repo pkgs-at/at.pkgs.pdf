@@ -22,8 +22,6 @@ import at.pkgs.pdf.builder.DocumentModel;
 
 public class Field {
 
-	private static final Pattern SECTION_SEPARATOR = Pattern.compile("\\s*\\|\\s*");
-
 	private static final Pattern PART_SEPARATOR = Pattern.compile("\\s*:\\s*");
 
 	private static final Pattern VALUE_SEPARATOR = Pattern.compile("\\s*,\\s*");
@@ -99,6 +97,23 @@ public class Field {
 		return this.getValueFormatter().format(value);
 	}
 
+	public static String[] splitByFirstAndLastIndexOf(int delimiter, String field) {
+		int first;
+		int last;
+		String head;
+		String tail;
+		String body;
+
+		first = field.indexOf(delimiter);
+		last = field.lastIndexOf(delimiter);
+		if (first < 0) return new String[] { field.trim(), null, null };
+		head = field.substring(0, first).trim();
+		tail = field.substring(last + 1).trim();
+		if (first == last) return new String[] { head, tail.isEmpty() ? null : tail, null };
+		body = field.substring(first + 1, last).trim();
+		return new String[] { head, body.isEmpty() ? null : body, tail.isEmpty() ? null : tail };
+	}
+
 	/*
 	 * FOTMAT:
 	 * page: left, top: width, height: horizontalAlign: textStyleName
@@ -117,7 +132,7 @@ public class Field {
 			String[] position;
 			String[] size;
 
-			sections = Field.SECTION_SEPARATOR.split(field.trim(), 3);
+			sections = Field.splitByFirstAndLastIndexOf('|', field);
 			parts = Field.PART_SEPARATOR.split(sections[0]);
 			if (parts.length != 5) throw new IllegalArgumentException("Invalid part count");
 			position = Field.VALUE_SEPARATOR.split(parts[1]);
@@ -137,8 +152,8 @@ public class Field {
 							factory.getTextStyle(parts[4]) :
 							TextStyle.parse(parts[4]),
 					factory.createValueFormatter(
-							sections.length < 2 ? null : sections[1],
-							sections.length < 3 ? null : sections[2]));
+							sections[1],
+							sections[2]));
 		}
 		catch (IllegalArgumentException cause) {
 			throw new IllegalArgumentException("Invalid field format", cause);
