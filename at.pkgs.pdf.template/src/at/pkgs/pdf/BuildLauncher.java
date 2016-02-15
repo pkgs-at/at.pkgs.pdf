@@ -63,26 +63,27 @@ public class BuildLauncher {
 			DocumentModel model)
 					throws IOException {
 		File temporal;
-		int result;
 
 		temporal = File.createTempFile(this.getClass().getName() + '.', ".xml");
 		try {
+			int result;
+
 			JAXB.marshal(model, temporal);
 			result = this.launch(
 					"-build",
 					template.getAbsolutePath(),
 					output.getAbsolutePath(),
 					temporal.getAbsolutePath());
+			if (result != 0)
+				throw new IOException(
+						String.format(
+								"failed on build document" +
+								" (process exit with %d)",
+								result));
 		}
 		finally {
 			temporal.delete();
 		}
-		if (result != 0)
-			throw new IOException(
-					String.format(
-							"failed on build document" +
-							" (process exit with %d)",
-							result));
 	}
 
 	public void concatenate(
@@ -110,6 +111,62 @@ public class BuildLauncher {
 			File... sources)
 					throws IOException {
 		this.concatenate(output, Arrays.asList(sources));
+	}
+
+	public void split(
+			File firstHalf,
+			File lastHalf,
+			File source,
+			int page)
+					throws IOException {
+		File temporal;
+
+		if (firstHalf == null && lastHalf == null)
+			throw new IllegalArgumentException("firstHalf and lastHalf are null");
+		temporal = null;
+		if (firstHalf == null) firstHalf = temporal = File.createTempFile(this.getClass().getName() + '.', ".pdf");
+		if (lastHalf == null) lastHalf = temporal = File.createTempFile(this.getClass().getName() + '.', ".pdf");
+		try {
+			int result;
+
+			result = this.launch(
+					"-split",
+					source.getAbsolutePath(),
+					firstHalf.getAbsolutePath(),
+					lastHalf.getAbsolutePath(),
+					Integer.toString(page, 10));
+			if (result != 0)
+				throw new IOException(
+						String.format(
+								"failed on split documents" +
+								" (process exit with %d)",
+								result));
+		}
+		finally {
+			if (temporal != null) temporal.delete();
+		}
+	}
+
+	public void extract(
+			File output,
+			File source,
+			int page,
+			int length)
+					throws IOException {
+		int result;
+
+		result = this.launch(
+				"-extract",
+				source.getAbsolutePath(),
+				output.getAbsolutePath(),
+				Integer.toString(page, 10),
+				Integer.toString(length, 10));
+		if (result != 0)
+			throw new IOException(
+					String.format(
+							"failed on extract documents" +
+							" (process exit with %d)",
+							result));
 	}
 
 }
