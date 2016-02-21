@@ -315,6 +315,198 @@ public class DocumentModel implements Serializable {
 
 	}
 
+	public static interface Verb extends Serializable {
+
+		// nothing
+
+	}
+
+	@XmlType(propOrder = {
+			"width",
+			"color",
+	})
+	@XmlAccessorType(XmlAccessType.NONE)
+	public static class Stroke implements Verb {
+
+		private static final long serialVersionUID = 1L;
+
+		private float width;
+
+		private String color;
+
+		public Stroke(
+				float width,
+				String color) {
+			this.width = width;
+			this.color = color;
+		}
+
+		public Stroke() {
+			this(
+					0F,
+					null);
+		}
+
+		@XmlAttribute(name = "width")
+		public float getWidth() {
+			return this.width;
+		}
+
+		public void setWidth(float value) {
+			this.width = value;
+		}
+
+		@XmlAttribute()
+		public String getColor() {
+			return this.color;
+		}
+
+		public void setColor(String color) {
+			this.color = color;
+		}
+
+	}
+
+	@XmlType(propOrder = {
+			"color",
+	})
+	@XmlAccessorType(XmlAccessType.NONE)
+	public static class Fill implements Verb {
+
+		private static final long serialVersionUID = 1L;
+
+		private String color;
+
+		public Fill(
+				String color) {
+			this.color = color;
+		}
+
+		public Fill() {
+			this(
+					null);
+		}
+
+		@XmlAttribute()
+		public String getColor() {
+			return this.color;
+		}
+
+		public void setColor(String color) {
+			this.color = color;
+		}
+
+	}
+
+	@XmlType(propOrder = {
+			"page",
+			"left",
+			"top",
+			"width",
+			"height",
+			"verb",
+	})
+	@XmlAccessorType(XmlAccessType.NONE)
+	public static class Rectangle implements Value {
+
+		private static final long serialVersionUID = 1L;
+
+		private int page;
+
+		private float left;
+
+		private float top;
+
+		private float width;
+
+		private float height;
+
+		private Verb verb;
+
+		public Rectangle(
+				int page,
+				float left,
+				float top,
+				float width,
+				float height,
+				Verb verb) {
+			this.page = page;
+			this.left = left;
+			this.top = top;
+			this.width = width;
+			this.height = height;
+			this.verb = verb;
+		}
+
+		public Rectangle() {
+			this(
+					0,
+					0F,
+					0F,
+					0F,
+					0F,
+					null);
+		}
+
+		@XmlAttribute(name = "page")
+		public int getPage() {
+			return this.page;
+		}
+
+		public void setPage(int value) {
+			this.page = value;
+		}
+
+		@XmlAttribute(name = "left")
+		public float getLeft() {
+			return this.left;
+		}
+
+		public void setLeft(float value) {
+			this.left = value;
+		}
+
+		@XmlAttribute(name = "top")
+		public float getTop() {
+			return this.top;
+		}
+
+		public void setTop(float value) {
+			this.top = value;
+		}
+
+		@XmlAttribute(name = "width")
+		public float getWidth() {
+			return this.width;
+		}
+
+		public void setWidth(float value) {
+			this.width = value;
+		}
+
+		@XmlAttribute(name = "height")
+		public float getHeight() {
+			return this.height;
+		}
+
+		public void setHeight(float value) {
+			this.height = value;
+		}
+
+		@XmlElements({
+			@XmlElement(name = "Stroke", type = Stroke.class),
+			@XmlElement(name = "Fill", type = Fill.class),
+		})
+		public Verb getVerb() {
+			return this.verb;
+		}
+
+		public void setVerb(Verb value) {
+			this.verb = value;
+		}
+
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	private int version;
@@ -354,7 +546,8 @@ public class DocumentModel implements Serializable {
 
 	@XmlElementWrapper(name = "Values")
 	@XmlElements({
-		@XmlElement(name = "Text", type = Text.class)
+		@XmlElement(name = "Text", type = Text.class),
+		@XmlElement(name = "Rectangle", type = Rectangle.class),
 	})
 	public List<Value> getValues() {
 		return this.values;

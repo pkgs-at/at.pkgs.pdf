@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="style.default">
+    monospaced.regular, 9, 15, 000000
+  </entry>
+  <entry key="page.date">
+    1 : 462, 143 : 80, 15: right : default |
+{0, date, yyyy年M月d日}
+  </entry>
+  <entry key="table.no">
+    1 : 52, 175 : 27, 15: right : default
+  </entry>
+  <entry key="barcode">
+    1 : 220, 100 : 330, 30: right : 0.5
+  </entry>
+</properties>

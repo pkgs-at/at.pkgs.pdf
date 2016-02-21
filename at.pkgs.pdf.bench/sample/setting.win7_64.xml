@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="template.file">./sample/template.pdf</entry>
+<entry key="script.file">./sample/script.js</entry>
+<entry key="binary.file">../at.pkgs.pdf.jar</entry>
+<entry key="output.file">./sample/output.pdf</entry>
+<entry key="command">C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe</entry>
+<entry key="field.file">./sample/field.xml</entry>
+</properties>

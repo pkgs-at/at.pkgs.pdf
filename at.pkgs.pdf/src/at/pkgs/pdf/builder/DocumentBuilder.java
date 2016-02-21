@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.awt.Color;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.Font;
 import com.lowagie.text.Phrase;
@@ -76,6 +77,17 @@ public class DocumentBuilder {
 						model.getEmbeded()));
 	}
 
+	public Color getColor(String color) {
+		int value;
+
+		if (color == null) return null;
+		value = Integer.parseInt(color, 16);
+		return new Color(
+				(value & 0xFF0000) >> 16,
+				(value & 0x00FF00) >> 8,
+				(value & 0x0000FF));
+	}
+
 	public Font buildFont(String name, float size, String color) {
 		Font font;
 
@@ -89,15 +101,8 @@ public class DocumentBuilder {
 					(value & 0x0F0) | (value & 0x0F0) >> 4,
 					(value & 0x00F) << 4 | (value & 0x00F));
 		}
-		if (color != null && color.length() == 6) {
-			int value;
-
-			value = Integer.parseInt(color, 16);
-			font.setColor(
-					(value & 0xFF0000) >> 16,
-					(value & 0x00FF00) >> 8,
-					(value & 0x0000FF));
-		}
+		if (color != null && !color.isEmpty())
+			font.setColor(this.getColor(color));
 		return font;
 	}
 
@@ -113,6 +118,10 @@ public class DocumentBuilder {
 		return this.size;
 	}
 
+	protected float getHeight(int page) {
+		return this.getSize(page).getHeight();
+	}
+
 	protected PdfContentByte getContent(int page) {
 		this.setPage(page);
 		return this.content;
@@ -124,7 +133,7 @@ public class DocumentBuilder {
 		Font font;
 		ColumnText column;
 
-		height = this.getSize(model.getPage()).getHeight();
+		height = this.getHeight(model.getPage());
 		font = this.buildFont(
 				model.getFont(),
 				model.getSize(),
@@ -153,10 +162,54 @@ public class DocumentBuilder {
 		column.go();
 	}
 
+	protected void stroke(PdfContentByte content, DocumentModel.Stroke model) {
+		content.saveState();
+		content.setLineWidth(model.getWidth());
+		content.setColorStroke(this.getColor(model.getColor()));
+		content.stroke();
+		content.restoreState();
+	}
+
+	protected void fill(PdfContentByte content, DocumentModel.Fill model) {
+		content.saveState();
+		content.setColorFill(this.getColor(model.getColor()));
+		content.fill();
+		content.restoreState();
+	}
+
+	protected void verb(PdfContentByte content, DocumentModel.Verb verb) {
+		if (verb instanceof DocumentModel.Stroke) {
+			this.stroke(content, (DocumentModel.Stroke)verb);
+			return;
+		}
+		if (verb instanceof DocumentModel.Fill) {
+			this.fill(content, (DocumentModel.Fill)verb);
+			return;
+		}
+		throw new UnsupportedOperationException();
+	}
+
+	public void rectangle(DocumentModel.Rectangle model) {
+		PdfContentByte content;
+
+		if (model.getVerb() == null) return;
+		content = this.getContent(model.getPage());
+		content.rectangle(
+				model.getLeft(),
+				this.getHeight(model.getPage()) - model.getTop() - model.getHeight(),
+				model.getWidth(),
+				model.getHeight());
+		this.verb(content, model.getVerb());
+	}
+
 	public void value(DocumentModel.Value value)
 			throws IOException, DocumentException {
 		if (value instanceof DocumentModel.Text) {
 			this.text((DocumentModel.Text)value);
+			return;
+		}
+		if (value instanceof DocumentModel.Rectangle) {
+			this.rectangle((DocumentModel.Rectangle)value);
 			return;
 		}
 		throw new UnsupportedOperationException();
