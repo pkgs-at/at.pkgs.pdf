@@ -30,11 +30,13 @@ function main(properties) {
 	})();
 	(function() {
 		var fields;
+		var height;
 		var data;
 		var values;
 		var index;
 
-		fields = factory.createFieldProvider(properties, 'table');
+		fields = factory.createFieldProvider(properties, 'table', 'height');
+		height = parseFloat(properties.getProperty('table.height'));
 		data = {
 				no: null,
 		};
@@ -45,7 +47,7 @@ function main(properties) {
 		}));
 		for (index = 0; index < 20; index ++) {
 			data.no = index + 1;
-			fields.merge(0, 14.6 * index, document, values);
+			fields.merge(0, height * index, document, values);
 		}
 	})();
 	(function() {

@@ -57,15 +57,17 @@ public class StandardFieldProvider extends FieldProvider {
 		map = new HashMap<String, Field>();
 		for (Object key : properties.keySet()) {
 			String name;
+			String field;
 			String value;
 
 			if (!(key instanceof String)) continue;
 			name = (String)key;
 			if (!name.startsWith(prefix)) continue;
-			if (ignored.contains(name)) continue;
+			field = name.substring(prefix.length());
+			if (ignored.contains(field)) continue;
 			value = properties.getProperty(name);
 			if (value == null) continue;
-			map.put(name.substring(prefix.length()), Field.parse(factory, value));
+			map.put(field, Field.parse(factory, value));
 		}
 		return new StandardFieldProvider(map);
 	}

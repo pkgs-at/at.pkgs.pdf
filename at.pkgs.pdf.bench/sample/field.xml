@@ -8,6 +8,9 @@
     1 : 462, 143 : 80, 15: right : default |
 {0, date, yyyy年M月d日}
   </entry>
+  <entry key="table.height">
+    14.62
+  </entry>
   <entry key="table.no">
     1 : 52, 175 : 27, 15: right : default
   </entry>
